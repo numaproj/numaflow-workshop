@@ -44,11 +44,23 @@ Install a local K8s cluster, if you don't have.
 ```shell
 kubectl create ns numaflow-system
 kubectl apply -k https://github.com/numaproj/numaflow-workshop/manifests/installation
-# Install an InterStepBufferService
+
+# Verify control plane pods are running in numaflow-system namespace
+kubectl -n numaflow-system get po
+
+NAME                                   READY   STATUS    RESTARTS   AGE
+numaflow-controller-86c9475986-bkp4j   1/1     Running   0          2m18s
+numaflow-dex-server-8656769d4c-5msjv   1/1     Running   0          2m18s
+numaflow-server-65dd556cf7-v64s2       1/1     Running   0          2m18s
+```
+
+Install an InterStepBufferService
+
+```shell
 kubectl apply -f https://raw.githubusercontent.com/numaproj/numaflow/stable/examples/0-isbsvc-jetstream.yaml
 ```
 
-You will see pods as like below in `default` namespace.
+You will see pods running like below in `default` namespace.
 
 ```
 kubectl get po
