@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - https://github.com/numaproj/numaflow/config/cluster-install?ref=v1.2.0
+
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: NUMAFLOW_IMAGE_PULL_POLICY
+          value: IfNotPresent
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: NUMAFLOW_DEBUG
+          value: "true"
+    target:
+      kind: Deployment
+      name: numaflow-controller
+  - patch: |
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: numaflow-cmd-params-config
+      data:
+        controller.leader.election.disabled: "true"
+
+namespace: numaflow-system
